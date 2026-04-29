@@ -1,6 +1,101 @@
 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 
 /* =========================
+   INIT SEGURO
+========================= */
+
+document.addEventListener("DOMContentLoaded", initApp);
+
+function initApp() {
+    initTheme();
+    initUser();
+    initTimerUI();
+    render();
+}
+
+/* =========================
+   MODAL (REEMPLAZO PROMPT)
+========================= */
+
+function openModal(title, value = "") {
+    return new Promise((resolve) => {
+
+        const modal = document.getElementById("modal");
+        const modalTitle = document.getElementById("modal-title");
+        const modalInput = document.getElementById("modal-input");
+        const modalOk = document.getElementById("modal-ok");
+        const modalCancel = document.getElementById("modal-cancel");
+
+        if (!modal || !modalTitle || !modalInput || !modalOk || !modalCancel) {
+            resolve(prompt(title, value));
+            return;
+        }
+
+        modalTitle.textContent = title;
+        modalInput.value = value;
+        modal.classList.remove("hidden");
+
+        const close = (result) => {
+            modal.classList.add("hidden");
+            modalOk.onclick = null;
+            modalCancel.onclick = null;
+            resolve(result);
+        };
+
+        modalOk.onclick = () => close(modalInput.value);
+        modalCancel.onclick = () => close(null);
+    });
+}
+
+/* =========================
+   THEME
+========================= */
+
+function initTheme() {
+    const themeToggle = document.getElementById("theme-toggle");
+
+    const savedTheme = localStorage.getItem("theme");
+    if (savedTheme) {
+        document.documentElement.setAttribute("data-theme", savedTheme);
+    }
+
+    if (!themeToggle) return;
+
+    themeToggle.onclick = () => {
+        const current = document.documentElement.getAttribute("data-theme");
+
+        if (current === "dark") {
+            document.documentElement.removeAttribute("data-theme");
+            localStorage.setItem("theme", "light");
+        } else {
+            document.documentElement.setAttribute("data-theme", "dark");
+            localStorage.setItem("theme", "dark");
+        }
+    };
+}
+
+/* =========================
+   USER NAME
+========================= */
+
+function initUser() {
+    const userNameEl = document.getElementById("user-name");
+
+    if (!userNameEl) return;
+
+    const saved = localStorage.getItem("userName");
+    if (saved) userNameEl.textContent = saved;
+
+    userNameEl.onclick = async () => {
+        const n = await openModal("Tu nombre", userNameEl.textContent);
+        if (n !== null) {
+            userNameEl.textContent = n;
+            localStorage.setItem("userName", n);
+        }
+    };
+}
+
+/* =========================
    TIMER
 ========================= */
 
@@ -22,92 +117,68 @@ function updateDisplay() {
     timer.textContent = format(timeLeft);
 }
 
-updateDisplay();
-
-function start() {
-    clearInterval(interval);
-
-    interval = setInterval(() => {
-    if (timeLeft <= 0) {
-    clearInterval(interval);
-    running = false;
-
-    playFinishSound();
-
-    timeLeft = defaultTime;
+function initTimerUI() {
     updateDisplay();
 
-    return;
-    }
+    if (!timer) return;
 
-        timeLeft--;
-        updateDisplay();
-
-    }, 1000);
-}
-
-function reset() {
-    clearInterval(interval);
-    timeLeft = defaultTime;
-    running = false;
-    updateDisplay();
-}
-
-/* CLICK / TAP */
-if (timer) {
     timer.addEventListener("click", async () => {
-        try {
-            if (audioCtx.state === "suspended") {
-                await audioCtx.resume();
-            }
-        } catch (e) {}
+        if (audioCtx.state === "suspended") await audioCtx.resume();
 
         if (running) {
-            reset();
+            resetTimer();
             return;
         }
 
         running = true;
-        start();
+        startTimer();
     });
 
-    /* =========================
-       LONG PRESS (MOBILE + DESKTOP)
-    ========================= */
+    let pressTimer;
 
-    let pressTimer = null;
-    let longPressActive = false;
-
-    const startPress = () => {
-        longPressActive = false;
-
-        pressTimer = setTimeout(() => {
-            longPressActive = true;
-
-            const input = prompt("Segundos del timer:", defaultTime);
+    timer.addEventListener("pointerdown", () => {
+        pressTimer = setTimeout(async () => {
+            const input = await openModal("Segundos del timer", defaultTime);
 
             if (input !== null) {
                 const val = parseInt(input);
-
                 if (!isNaN(val) && val > 0) {
                     defaultTime = val;
                     localStorage.setItem("defaultTime", val);
-                    reset();
+                    resetTimer();
                 }
             }
         }, 600);
-    };
+    });
 
-    const cancelPress = () => {
-        clearTimeout(pressTimer);
-    };
+    timer.addEventListener("pointerup", () => clearTimeout(pressTimer));
+}
 
-    timer.addEventListener("pointerdown", startPress);
-    timer.addEventListener("pointerup", cancelPress);
-    timer.addEventListener("pointercancel", cancelPress);
-    timer.addEventListener("pointerleave", cancelPress);
+function startTimer() {
+    clearInterval(interval);
 
-    timer.style.userSelect = "none";
+    interval = setInterval(() => {
+        if (timeLeft <= 0) {
+            clearInterval(interval);
+            running = false;
+
+            playFinishSound();
+
+            timeLeft = defaultTime;
+            updateDisplay();
+            return;
+        }
+
+        timeLeft--;
+        updateDisplay();
+    }, 1000);
+}
+
+function resetTimer() {
+    clearInterval(interval);
+    timeLeft = defaultTime;
+    running = false;
+    updateDisplay();
 }
 
 /* =========================
@@ -115,44 +186,23 @@ if (timer) {
 ========================= */
 
 function playBeep(freq = 1500, duration = 0.2) {
-    try {
-        const o = audioCtx.createOscillator();
-        const g = audioCtx.createGain();
+    const o = audioCtx.createOscillator();
+    const g = audioCtx.createGain();
 
-        o.type = "square";
-        o.frequency.value = freq;
+    o.type = "square";
+    o.frequency.value = freq;
 
-        o.connect(g);
-        g.connect(audioCtx.destination);
+    o.connect(g);
+    g.connect(audioCtx.destination);
 
-        o.start();
-        o.stop(audioCtx.currentTime + duration);
-    } catch (e) {}
+    o.start();
+    o.stop(audioCtx.currentTime + duration);
 }
 
 function playFinishSound() {
     for (let i = 0; i < 3; i++) {
         setTimeout(() => playBeep(1600, 0.2), i * 250);
     }
-}
-
-/* =========================
-   USER NAME
-========================= */
-
-const userNameEl = document.getElementById("user-name");
-
-if (userNameEl) {
-    const savedName = localStorage.getItem("userName");
-    if (savedName) userNameEl.textContent = savedName;
-
-    userNameEl.onclick = () => {
-        const n = prompt("Tu nombre:", userNameEl.textContent);
-        if (n !== null) {
-            userNameEl.textContent = n;
-            localStorage.setItem("userName", n);
-        }
-    };
 }
 
 /* =========================
@@ -180,6 +230,7 @@ function saveData(data) {
 ========================= */
 
 function render() {
+
     const data = getData();
 
     const days = document.getElementById("days-container");
@@ -212,20 +263,14 @@ function render() {
             const el = document.getElementById(sectionId);
             if (!el) return;
 
-            const yOffset = -80; // ajusta si tu header es más alto o más bajo
-            const y = el.getBoundingClientRect().top + window.pageYOffset + yOffset;
-
-            window.scrollTo({
-                top: y,
-                behavior: "smooth"
-            });
+            const y = el.getBoundingClientRect().top + window.pageYOffset - 80;
+            window.scrollTo({ top: y, behavior: "smooth" });
         };
 
-
-        card.addEventListener("contextmenu", (e) => {
+        card.addEventListener("contextmenu", async (e) => {
             e.preventDefault();
 
-            const nuevo = prompt(`Editar Día ${index + 1}:`, dia.descripcion);
+            const nuevo = await openModal(`Editar Día ${index + 1}`, dia.descripcion);
 
             if (nuevo !== null) {
                 dia.descripcion = nuevo.trim() || "Descanso";
@@ -267,10 +312,10 @@ function render() {
             weight.className = "ex-weight";
             weight.textContent = (e.peso || 0) + " kg";
 
-            weight.onclick = (ev) => {
+            weight.onclick = async (ev) => {
                 ev.stopPropagation();
 
-                const n = prompt("Peso (kg):", e.peso || 0);
+                const n = await openModal("Peso (kg)", e.peso || 0);
 
                 if (n !== null) {
                     const val = parseFloat(n);
@@ -287,10 +332,14 @@ function render() {
             exCard.appendChild(notes);
             exCard.appendChild(controls);
 
-            exCard.onclick = () => {
-                e.nombre = prompt("Ejercicio:", e.nombre) || e.nombre;
-                e.volumen = prompt("Volumen:", e.volumen) || e.volumen;
-                e.notas = prompt("Notas:", e.notas) || e.notas;
+            exCard.onclick = async () => {
+                const n1 = await openModal("Ejercicio", e.nombre);
+                const n2 = await openModal("Volumen", e.volumen);
+                const n3 = await openModal("Notas", e.notas);
+
+                if (n1 !== null) e.nombre = n1;
+                if (n2 !== null) e.volumen = n2;
+                if (n3 !== null) e.notas = n3;
 
                 saveData(data);
                 render();
@@ -318,74 +367,3 @@ function render() {
         cont.appendChild(btn);
     });
 }
-
-/* =========================
-   EXPORT / IMPORT
-========================= */
-
-const exportBtn = document.getElementById("export-btn");
-const importBtn = document.getElementById("import-btn");
-const fileInput = document.getElementById("file-input");
-
-if (exportBtn) {
-    exportBtn.onclick = () => {
-        const data = localStorage.getItem("rutina");
-        if (!data) return;
-
-        const blob = new Blob([data], { type: "application/json" });
-
-        const a = document.createElement("a");
-        a.href = URL.createObjectURL(blob);
-        a.download = "rutina.json";
-        a.click();
-    };
-}
-
-if (importBtn && fileInput) {
-    importBtn.onclick = () => fileInput.click();
-
-    fileInput.onchange = (e) => {
-        const file = e.target.files[0];
-
-        const reader = new FileReader();
-
-        reader.onload = () => {
-            localStorage.setItem("rutina", reader.result);
-            location.reload();
-        };
-
-        reader.readAsText(file);
-    };
-}
-
-/* =========================
-   THEME
-========================= */
-
-const themeToggle = document.getElementById("theme-toggle");
-
-if (themeToggle) {
-    const savedTheme = localStorage.getItem("theme");
-
-    if (savedTheme) {
-        document.documentElement.setAttribute("data-theme", savedTheme);
-    }
-
-    themeToggle.onclick = () => {
-        const current = document.documentElement.getAttribute("data-theme");
-
-        if (current === "dark") {
-            document.documentElement.removeAttribute("data-theme");
-            localStorage.setItem("theme", "light");
-        } else {
-            document.documentElement.setAttribute("data-theme", "dark");
-            localStorage.setItem("theme", "dark");
-        }
-    };
-}
-
-/* =========================
-   INIT
-========================= */
-
-render();
