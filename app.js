@@ -10,6 +10,7 @@ function initApp() {
     initTheme();
     initUser();
     initTimerUI();
+    initIO();
     render();
 }
 
@@ -226,6 +227,50 @@ function saveData(data) {
 }
 
 /* =========================
+   IMPORT EXPORT
+========================= */
+function initIO() {
+    const exportBtn = document.getElementById("export-btn");
+    const importBtn = document.getElementById("import-btn");
+    const fileInput = document.getElementById("file-input");
+
+    if (!exportBtn || !importBtn || !fileInput) return;
+
+    exportBtn.onclick = () => {
+        const data = localStorage.getItem("rutina") || "{}";
+
+        const blob = new Blob([data], { type: "application/json" });
+        const url = URL.createObjectURL(blob);
+
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "rutina.json";
+        a.click();
+
+        URL.revokeObjectURL(url);
+    };
+
+    importBtn.onclick = () => {
+        fileInput.value = "";
+        fileInput.click();
+    };
+
+    fileInput.onchange = (e) => {
+        const file = e.target.files?.[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+
+        reader.onload = () => {
+            localStorage.setItem("rutina", reader.result);
+            render();
+        };
+
+        reader.readAsText(file);
+    };
+}
+
+/* =========================
    RENDER
 ========================= */
 
@@ -285,6 +330,18 @@ function render() {
         title.className = "section-title";
         title.id = sectionId;
         title.textContent = `Día ${index + 1}: ${dia.descripcion}`;
+
+        title.addEventListener("contextmenu", async (e) => {
+            e.preventDefault();
+
+            const nuevo = await openModal(`Editar Día ${index + 1}`, dia.descripcion);
+
+            if (nuevo !== null) {
+                dia.descripcion = nuevo.trim() || "Descanso";
+                saveData(data);
+                render();
+            }
+        });
 
         cont.appendChild(title);
 
