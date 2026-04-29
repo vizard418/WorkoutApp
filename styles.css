@@ -1,0 +1,335 @@
+:root {
+    --bg: #f4f6f8;
+    --card: #ffffff;
+    --primary: #111111;
+    --accent: #696ddc;
+    --accent-soft: rgba(105, 109, 220, 0.12);
+    --text: #1f2937;
+    --muted: #6b7280;
+    --border: #e5e7eb;
+}
+
+[data-theme="dark"] {
+    --bg: #0f172a;
+    --card: #1e293b;
+    --primary: #ffffff;
+    --accent: #7c7ff0;
+    --accent-soft: rgba(124, 127, 240, 0.15);
+    --text: #e5e7eb;
+    --muted: #94a3b8;
+    --border: #334155;
+}
+
+/* =========================
+   BASE
+========================= */
+
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 1.35;
+    letter-spacing: -0.2px;
+
+    background: var(--bg);
+    color: var(--text);
+
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+}
+
+/* =========================
+   HEADER
+========================= */
+
+header {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    padding: 10px 16px;
+    z-index: 1000;
+
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+
+    background: rgba(255, 255, 255, 0.75);
+    border-bottom: 1px solid rgba(0,0,0,0.05);
+}
+
+[data-theme="dark"] header {
+    background: rgba(15, 23, 42, 0.75);
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+}
+
+.header-container {
+    max-width: 1100px;
+    margin: auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.logo {
+    font-size: 1rem;
+}
+
+.title {
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+.clickable-name {
+    cursor: pointer;
+    padding: 2px 6px;
+    border-radius: 6px;
+}
+
+.clickable-name:hover {
+    background: var(--accent-soft);
+}
+
+/* =========================
+   THEME BUTTON (FIX CLAVE)
+========================= */
+
+.theme-btn {
+    border: none;
+    background: transparent;
+    color: var(--text); /* 🔥 FIX IMPORTANTE */
+    font-size: 1.1rem;
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+.theme-btn:hover {
+    background: var(--accent-soft);
+}
+
+/* =========================
+   MAIN
+========================= */
+
+main {
+    padding-top: 70px;
+    max-width: 1100px;
+    margin: auto;
+    padding-left: 16px;
+    padding-right: 16px;
+}
+
+/* =========================
+   DAYS
+========================= */
+
+.days {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 10px;
+    margin-bottom: 18px;
+}
+
+.day-card {
+    background: var(--card);
+    border-radius: 12px;
+    padding: 12px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.day-card:hover {
+    transform: translateY(-2px);
+}
+
+.day-card h3 {
+    font-size: 0.85rem;
+    font-weight: 500;
+    margin: 0 0 4px 0;
+}
+
+.day-card p {
+    font-size: 0.75rem;
+    color: var(--muted);
+}
+
+/* =========================
+   SECTION TITLE
+========================= */
+
+.section-title {
+    margin: 24px 0 8px;
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+/* =========================
+   EXERCISES
+========================= */
+
+.exercise-card {
+    background: var(--card);
+    border-radius: 12px;
+    padding: 12px;
+    margin-bottom: 8px;
+}
+
+.ex-name {
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+.ex-info,
+.ex-notes {
+    font-size: 0.75rem;
+    color: var(--muted);
+}
+
+.ex-controls {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.ex-controls button {
+    border: none;
+    background: var(--accent);
+    color: white;
+    width: 32px;
+    height: 32px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-weight: 500;
+}
+
+.ex-weight {
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+/* =========================
+   ADD BUTTON
+========================= */
+
+.add-btn {
+    margin-top: 8px;
+    border: none;
+    background: var(--accent);
+    color: white;
+    padding: 7px 10px;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    cursor: pointer;
+}
+
+/* =========================
+   TIMER
+========================= */
+
+.timer {
+    position: fixed;
+    bottom: 18px;
+    right: 18px;
+    width: 60px;
+    height: 60px;
+
+    background: var(--accent);
+    color: white;
+
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 0.8rem;
+    font-weight: 500;
+
+    cursor: pointer;
+    box-shadow: 0 8px 18px rgba(0,0,0,0.25);
+}
+
+/* =========================
+   FOOTER
+========================= */
+
+footer {
+    text-align: center;
+    font-size: 0.7rem;
+    color: var(--muted);
+    padding: 26px 0;
+}
+
+footer a {
+    color: var(--muted);
+    text-decoration: none;
+}
+
+footer a:hover {
+    color: var(--accent);
+}
+
+/* =========================
+   FOOTER ACTIONS
+========================= */
+
+.footer-actions {
+    margin-top: 8px;
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+}
+
+.footer-actions button {
+    background: var(--card);
+    color: var(--text);
+    border: 1px solid var(--border);
+    padding: 5px 9px;
+    border-radius: 8px;
+    font-size: 0.7rem;
+    cursor: pointer;
+}
+
+.timer {
+    -webkit-tap-highlight-color: transparent;
+    outline: none;
+}
+
+.timer:focus {
+    outline: none;
+}
+
+.timer {
+    user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+}.timer {
+    -webkit-tap-highlight-color: transparent;
+    outline: none;
+}
+
+.timer:focus {
+    outline: none;
+}
+
+.timer {
+    user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+}
+
+* {
+    -webkit-tap-highlight-color: transparent;
+}

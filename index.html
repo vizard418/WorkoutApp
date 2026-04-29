@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Workout App</title>
+
+<link rel="icon" type="image/png" sizes="32x32" href="icons/icon-192.png">
+<link rel="stylesheet" href="styles.css">
+<link rel="manifest" href="manifest.json">
+
+<!-- Fuente moderna -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+</head>
+
+<body>
+
+<header>
+<div class="header-container">
+
+    <div class="brand">
+        <span class="logo">⚡</span>
+        <span id="user-name" class="title clickable-name">Gonza Vizard</span>
+    </div>
+
+    <button id="theme-toggle" class="theme-btn">🌙</button>
+
+</div>
+</header>
+
+<main>
+
+<div class="days" id="days-container"></div>
+<div id="rutina-container"></div>
+
+</main>
+
+<footer>
+    Hecho con ♥ 
+    <a href="https://github.com/vizard418" target="_blank">Vizard</a>
+
+    <div class="footer-actions">
+        <button id="export-btn">Exportar</button>
+        <button id="import-btn">Importar</button>
+        <input type="file" id="file-input" accept=".json" hidden>
+    </div>
+</footer>
+
+<div class="timer" id="timer"></div>
+
+<script src="app.js"></script>
+</body>
+</html>
