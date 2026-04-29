@@ -36,6 +36,11 @@ function openModal(title, value = "") {
         modalInput.value = value;
         modal.classList.remove("hidden");
 
+        setTimeout(() => {
+            modalInput.focus();
+            modalInput.select();
+        }, 50);
+
         const close = (result) => {
             modal.classList.add("hidden");
             modalOk.onclick = null;
