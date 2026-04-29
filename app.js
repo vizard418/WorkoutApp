@@ -315,7 +315,7 @@ function render() {
         card.addEventListener("contextmenu", async (e) => {
             e.preventDefault();
 
-            const nuevo = await openModal(`Editar Día ${index + 1}`, dia.descripcion);
+            const nuevo = await openModal(`Cambiar título Día ${index + 1}`, dia.descripcion);
 
             if (nuevo !== null) {
                 dia.descripcion = nuevo.trim() || "Descanso";
@@ -424,8 +424,8 @@ function render() {
 
         btn.onclick = () => {
             dia.ejercicios.push({
-                nombre: "Nuevo",
-                volumen: "",
+                nombre: "Nombre del ejercicio.",
+                volumen: "Ej. 3x12 (series x reps)",
                 notas: "",
                 peso: 0
             });
