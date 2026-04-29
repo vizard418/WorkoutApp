@@ -345,7 +345,7 @@ function render() {
 
         cont.appendChild(title);
 
-        dia.ejercicios.forEach((e) => {
+        dia.ejercicios.forEach((e, exIndex) => {
 
             const exCard = document.createElement("div");
             exCard.className = "exercise-card";
@@ -401,6 +401,19 @@ function render() {
                 saveData(data);
                 render();
             };
+
+           exCard.addEventListener("contextmenu", (ev) => {
+                ev.preventDefault();
+
+                const confirmDelete = confirm("Eliminar ejercicio?");
+
+                if (!confirmDelete) return;
+
+                dia.ejercicios.splice(exIndex, 1);
+
+                saveData(data);
+                render();
+            }); 
 
             cont.appendChild(exCard);
         });
