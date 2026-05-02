@@ -1,6 +1,42 @@
 import { getData, saveData } from "./state.js";
 import { openModal } from "./modal.js";
 
+// =========================
+// PESOS HELPERS
+// =========================
+
+function normalizePesos(e) {
+    // migración suave desde sistema viejo
+    if (!Array.isArray(e.pesos)) {
+        if (typeof e.peso === "number" && e.peso > 0) {
+            e.pesos = [e.peso];
+        } else {
+            e.pesos = [];
+        }
+    }
+
+    return e.pesos;
+}
+
+function pushPeso(e, value) {
+    const pesos = normalizePesos(e);
+
+    pesos.push(value);
+
+    // mantener solo últimos 5
+    while (pesos.length > 5) {
+        pesos.shift();
+    }
+}
+
+function updatePeso(e, index, value) {
+    const pesos = normalizePesos(e);
+
+    if (index >= 0 && index < pesos.length) {
+        pesos[index] = value;
+    }
+}
+
 export function render() {
     const data = getData();
 
@@ -57,18 +93,6 @@ export function render() {
         title.id = sectionId;
         title.textContent = `Día ${index + 1}: ${dia.descripcion}`;
 
-        title.addEventListener("contextmenu", async (e) => {
-            e.preventDefault();
-
-            const nuevo = await openModal(`Editar Día ${index + 1}`, dia.descripcion);
-
-            if (nuevo !== null) {
-                dia.descripcion = nuevo.trim() || "Descanso";
-                saveData(data);
-                render();
-            }
-        });
-
         cont.appendChild(title);
 
         dia.ejercicios.forEach((e, exIndex) => {
@@ -91,24 +115,73 @@ export function render() {
             const controls = document.createElement("div");
             controls.className = "ex-controls";
 
-            const weight = document.createElement("div");
-            weight.className = "ex-weight";
-            weight.textContent = (e.peso || 0) + " kg";
+            // =========================
+            // PESOS UI (NUEVO)
+            // =========================
 
-            weight.onclick = async (ev) => {
+            const pesos = normalizePesos(e);
+
+            const pesosContainer = document.createElement("div");
+            pesosContainer.style.display = "flex";
+            pesosContainer.style.gap = "6px";
+            pesosContainer.style.alignItems = "center";
+
+            pesos.forEach((p, i) => {
+                const btn = document.createElement("button");
+                btn.textContent = p + "kg";
+
+                btn.style.border = "none";
+                btn.style.borderRadius = "6px";
+                btn.style.padding = "3px 6px";
+                btn.style.fontSize = "0.75rem";
+                btn.style.cursor = "pointer";
+
+                btn.onclick = async (ev) => {
+                    ev.stopPropagation();
+
+                    const n = await openModal("Editar peso (kg)", p);
+
+                    if (n !== null) {
+                        const val = parseFloat(n);
+
+                        if (!isNaN(val) && val >= 0) {
+                            updatePeso(e, i, val);
+                            saveData(data);
+                            render();
+                        }
+                    }
+                };
+
+                pesosContainer.appendChild(btn);
+            });
+
+            const addBtn = document.createElement("button");
+            addBtn.textContent = "+";
+
+            addBtn.style.border = "none";
+            addBtn.style.borderRadius = "6px";
+            addBtn.style.padding = "3px 8px";
+            addBtn.style.cursor = "pointer";
+
+            addBtn.onclick = async (ev) => {
                 ev.stopPropagation();
 
-                const n = await openModal("Peso (kg)", e.peso || 0);
+                const n = await openModal("Nuevo peso (kg)", "");
 
                 if (n !== null) {
                     const val = parseFloat(n);
-                    e.peso = isNaN(val) ? e.peso : Math.max(0, val);
-                    saveData(data);
-                    render();
+
+                    if (!isNaN(val) && val >= 0) {
+                        pushPeso(e, val);
+                        saveData(data);
+                        render();
+                    }
                 }
             };
 
-            controls.appendChild(weight);
+            pesosContainer.appendChild(addBtn);
+
+            controls.appendChild(pesosContainer);
 
             exCard.appendChild(name);
             exCard.appendChild(volume);
@@ -151,7 +224,8 @@ export function render() {
                 nombre: "Nombre del ejercicio.",
                 volumen: "Ej. 3x12 (series x reps)",
                 notas: "",
-                peso: 0
+                peso: 0,
+                pesos: []
             });
 
             saveData(data);
