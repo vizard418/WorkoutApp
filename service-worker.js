@@ -1,26 +1,27 @@
 const CACHE_NAME = "workout-app-v2";
+const BASE = self.registration.scope;
 
 const urlsToCache = [
-  "/",
-  "/index.html",
+  "./",
+  "./index.html",
 
-  "/styles/variables.css",
-  "/styles/base.css",
-  "/styles/layout.css",
-  "/styles/components.css",
-  "/styles/modal.css",
-  "/styles/utilities.css",
+  "./styles/variables.css",
+  "./styles/base.css",
+  "./styles/layout.css",
+  "./styles/components.css",
+  "./styles/modal.css",
+  "./styles/utilities.css",
 
-  "/js/main.js",
-  "/js/ui.js",
-  "/js/modal.js",
-  "/js/timer.js",
-  "/js/state.js",
-  "/js/storage.js",
-  "/js/render.js",
+  "./js/main.js",
+  "./js/ui.js",
+  "./js/modal.js",
+  "./js/timer.js",
+  "./js/state.js",
+  "./js/storage.js",
+  "./js/render.js",
 
-  "/icons/icon-192.png",
-  "/icons/icon-512.png"
+  "./icons/icon-192.png",
+  "./icons/icon-512.png"
 ];
 
 self.addEventListener("install", event => {
@@ -29,13 +30,17 @@ self.addEventListener("install", event => {
   );
 });
 
+self.addEventListener("activate", event => {
+  event.waitUntil(self.clients.claim());
+});
+
 self.addEventListener("fetch", event => {
   const request = event.request;
 
-  // solo manejar GET (evita warnings y errores con otros metodos)
+  // solo GET
   if (request.method !== "GET") return;
 
-  // ignorar requests externas (fonts, extensiones, etc.)
+  // ignorar externos (CDN, extensiones, etc.)
   if (!request.url.startsWith(self.location.origin)) return;
 
   event.respondWith(
