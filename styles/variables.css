@@ -1,0 +1,21 @@
+:root {
+    --bg: #f4f6f8;
+    --card: #ffffff;
+    --primary: #111111;
+    --accent: #696ddc;
+    --accent-soft: rgba(105, 109, 220, 0.12);
+    --text: #1f2937;
+    --muted: #6b7280;
+    --border: #e5e7eb;
+}
+
+[data-theme="dark"] {
+    --bg: #0f172a;
+    --card: #1e293b;
+    --primary: #ffffff;
+    --accent: #7c7ff0;
+    --accent-soft: rgba(124, 127, 240, 0.15);
+    --text: #e5e7eb;
+    --muted: #94a3b8;
+    --border: #334155;
+}

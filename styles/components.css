@@ -1,0 +1,142 @@
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.logo {
+    font-size: 1.15rem;
+    line-height: 1;
+    display: inline-flex;
+    align-items: center;
+}
+
+.title {
+    font-size: 0.85rem;
+    font-weight: 500;
+}
+
+.clickable-name {
+    cursor: pointer;
+    padding: 2px 6px;
+    border-radius: 6px;
+}
+
+.clickable-name:hover {
+    background: var(--accent-soft);
+}
+
+.theme-btn {
+    border: none;
+    background: transparent;
+    color: var(--text);
+
+    width: 36px;
+    height: 36px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 1.15rem;
+    cursor: pointer;
+    border-radius: 8px;
+
+    transform: translateY(1px);
+}
+
+.theme-btn:hover {
+    background: var(--accent-soft);
+}
+
+.day-card {
+    background: var(--card);
+    border-radius: 12px;
+    padding: 12px;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.day-card:hover {
+    transform: translateY(-2px);
+}
+
+.day-card h3 {
+    font-size: 0.85rem;
+    margin: 0 0 4px;
+}
+
+.day-card p {
+    font-size: 0.75rem;
+    color: var(--muted);
+}
+
+.section-title {
+    margin: 10px 0 4px;
+    padding: 6px 10px;
+    font-size: 0.82rem;
+    border-left: 3px solid var(--accent);
+    background: var(--accent-soft);
+    border-radius: 6px;
+}
+
+.exercise-card {
+    background: var(--card);
+    border-radius: 10px;
+    padding: 10px;
+}
+
+.exercise-card + .exercise-card {
+    margin-top: 4px;
+}
+
+.ex-name {
+    font-size: 0.82rem;
+    font-weight: 500;
+}
+
+.ex-info,
+.ex-notes {
+    font-size: 0.72rem;
+    color: var(--muted);
+}
+
+.ex-weight {
+    font-size: 0.82rem;
+    font-weight: 500;
+}
+
+.ex-controls {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 8px;
+}
+
+.add-btn {
+    margin-top: 12px;
+    margin-bottom: 24px;
+    border: none;
+    background: var(--accent);
+    color: white;
+    padding: 7px 10px;
+    border-radius: 8px;
+    font-size: 0.8rem;
+    cursor: pointer;
+}
+
+.timer {
+    position: fixed;
+    bottom: 18px;
+    right: 18px;
+    width: 60px;
+    height: 60px;
+    background: var(--accent);
+    color: white;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    cursor: pointer;
+    box-shadow: 0 8px 18px rgba(0,0,0,0.25);
+}

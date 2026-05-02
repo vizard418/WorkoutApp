@@ -3,7 +3,14 @@ const CACHE_NAME = "workout-app-v2";
 const urlsToCache = [
   "/",
   "/index.html",
-  "/styles.css",
+
+  "/styles/variables.css",
+  "/styles/base.css",
+  "/styles/layout.css",
+  "/styles/components.css",
+  "/styles/modal.css",
+  "/styles/utilities.css",
+
   "/js/main.js",
   "/js/ui.js",
   "/js/modal.js",
@@ -11,6 +18,7 @@ const urlsToCache = [
   "/js/state.js",
   "/js/storage.js",
   "/js/render.js",
+
   "/icons/icon-192.png",
   "/icons/icon-512.png"
 ];

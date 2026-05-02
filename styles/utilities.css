@@ -1,0 +1,18 @@
+* {
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+}
+
+body {
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+button, div {
+    -webkit-tap-highlight-color: transparent;
+}
+
+.timer {
+    outline: none;
+    user-select: none;
+}
