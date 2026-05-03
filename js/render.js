@@ -37,6 +37,33 @@ function updatePeso(e, index, value) {
     }
 }
 
+// fix de eventos long-press
+function attachLongPress(element, callback, delay = 600) {
+    let timer = null;
+
+    const start = (e) => {
+        e.preventDefault?.();
+
+        timer = setTimeout(() => {
+            callback(e);
+        }, delay);
+    };
+
+    const cancel = () => {
+        clearTimeout(timer);
+        timer = null;
+    };
+
+    element.addEventListener("pointerdown", start);
+    element.addEventListener("pointerup", cancel);
+    element.addEventListener("pointerleave", cancel);
+    element.addEventListener("pointercancel", cancel);
+
+    element.addEventListener("contextmenu", (e) => {
+        e.preventDefault();
+    });
+}
+
 export function render() {
     const data = getData();
 
@@ -74,9 +101,8 @@ export function render() {
             window.scrollTo({ top: y, behavior: "smooth" });
         };
 
-        card.addEventListener("contextmenu", async (e) => {
-            e.preventDefault();
-
+        // addEventLister con fix Long-Press
+        attachLongPress(card, async () => {
             const nuevo = await openModal(`Cambiar título Día ${index + 1}`, dia.descripcion);
 
             if (nuevo !== null) {
@@ -93,9 +119,8 @@ export function render() {
         title.id = sectionId;
         title.textContent = `Día ${index + 1}: ${dia.descripcion}`;
 
-        title.addEventListener("contextmenu", async (e) => {
-            e.preventDefault();
-
+        // addEventListener con fix Long-Press
+        attachLongPress(title, async () => {
             const nuevo = await openModal(`Cambiar título Día ${index + 1}`, dia.descripcion);
 
             if (nuevo !== null) {
@@ -214,16 +239,15 @@ export function render() {
                 render();
             };
 
-            exCard.addEventListener("contextmenu", (ev) => {
-                ev.preventDefault();
+        // addEventListener con fix long-press
+        attachLongPress(exCard, () => {
+            const confirmDelete = confirm("Eliminar ejercicio?");
+            if (!confirmDelete) return;
 
-                const confirmDelete = confirm("Eliminar ejercicio?");
-                if (!confirmDelete) return;
-
-                dia.ejercicios.splice(exIndex, 1);
-                saveData(data);
-                render();
-            });
+            dia.ejercicios.splice(exIndex, 1);
+            saveData(data);
+            render();
+        });
 
             cont.appendChild(exCard);
         });
