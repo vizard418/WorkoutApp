@@ -1,10 +1,12 @@
 import { getData, saveData } from "./state.js";
 import { openModal, openExerciseModal } from "./modal.js";
 
+let dragFromIndex = null;
+let dragDiaIndex = null;
+
 // =========================
 // PESOS HELPERS
 // =========================
-
 function normalizePesos(e) {
     // migración suave desde sistema viejo
     if (!Array.isArray(e.pesos)) {
@@ -136,6 +138,42 @@ export function render() {
 
             const exCard = document.createElement("div");
             exCard.className = "exercise-card";
+            exCard.draggable = true;
+
+            // drag start
+            exCard.addEventListener("dragstart", () => {
+                dragFromIndex = exIndex;
+                dragDiaIndex = index;
+
+                // agregado: clase para estilar
+                exCard.classList.add("dragging");
+            });
+
+            // limpiarlo cuando termina
+            exCard.addEventListener("dragend", () => {
+                exCard.classList.remove("dragging");
+            });
+
+            // permitir drop
+            exCard.addEventListener("dragover", (e) => {
+                e.preventDefault();
+            });
+
+            // drop reordenar evento
+            exCard.addEventListener("drop", () => {
+                if (dragDiaIndex !== index) return;
+
+                const from = dragFromIndex;
+                const to = exIndex;
+
+                if (from === to) return;
+
+                const moved = dia.ejercicios.splice(from, 1)[0];
+                dia.ejercicios.splice(to, 0, moved);
+
+                saveData(data);
+                render();
+            });
 
             const name = document.createElement("div");
             name.className = "ex-name";

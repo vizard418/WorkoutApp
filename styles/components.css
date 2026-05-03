@@ -148,6 +148,13 @@
     background: rgba(239, 68, 68, 0.12);
 }
 
+/* tarjeta dias: estilos drag */
+/* estado mientras arrastras */
+.exercise-card.dragging {
+    opacity: 0.4;
+    transform: scale(0.98);
+}
+
 /* temporizador */
 .timer {
     position: fixed;

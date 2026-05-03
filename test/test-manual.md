@@ -16,6 +16,7 @@
 * Agregar peso 2
 * Editar peso 1
 * Editar peso 2
+* Reordenar ejercicios (drag and drop)
 * Eliminar ejercicio
 
 ## Temporizador
