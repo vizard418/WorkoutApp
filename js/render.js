@@ -218,7 +218,23 @@ export function render() {
 
             pesosContainer.appendChild(addBtn);
 
+            const deleteBtn = document.createElement("button");
+            deleteBtn.className = "ex-delete-btn";
+            deleteBtn.textContent = "🗑";
+
+            deleteBtn.onclick = (ev) => {
+                ev.stopPropagation();
+
+                const confirmDelete = confirm("Eliminar ejercicio?");
+                if (!confirmDelete) return;
+
+                dia.ejercicios.splice(exIndex, 1);
+                saveData(data);
+                render();
+            };
+
             controls.appendChild(pesosContainer);
+            controls.appendChild(deleteBtn);
 
             exCard.appendChild(name);
             exCard.appendChild(volume);
@@ -238,16 +254,6 @@ export function render() {
                 saveData(data);
                 render();
             };
-
-        // addEventListener con fix long-press
-        attachLongPress(exCard, () => {
-            const confirmDelete = confirm("Eliminar ejercicio?");
-            if (!confirmDelete) return;
-
-            dia.ejercicios.splice(exIndex, 1);
-            saveData(data);
-            render();
-        });
 
             cont.appendChild(exCard);
         });

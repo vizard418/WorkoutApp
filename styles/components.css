@@ -1,3 +1,4 @@
+/* header y brand */
 .brand {
     display: flex;
     align-items: center;
@@ -16,6 +17,8 @@
     font-weight: 500;
 }
 
+
+/* username editable */
 .clickable-name {
     cursor: pointer;
     padding: 2px 6px;
@@ -26,6 +29,8 @@
     background: var(--accent-soft);
 }
 
+
+/* boton modo oscuro */
 .theme-btn {
     border: none;
     background: transparent;
@@ -49,6 +54,7 @@
     background: var(--accent-soft);
 }
 
+/* tarjetas dias */
 .day-card {
     background: var(--card);
     border-radius: 12px;
@@ -71,6 +77,7 @@
     color: var(--muted);
 }
 
+/* titulo de lista de ejercicios */
 .section-title {
     margin: 10px 0 4px;
     padding: 6px 10px;
@@ -80,6 +87,7 @@
     border-radius: 6px;
 }
 
+/* tarjetas de ejercicios */
 .exercise-card {
     background: var(--card);
     border-radius: 10px;
@@ -124,6 +132,23 @@
     cursor: pointer;
 }
 
+.ex-delete-btn {
+    border: none;
+    background: transparent;
+    cursor: pointer;
+    font-size: 1rem;
+    padding: 0 6px;
+    border-radius: 6px;
+
+    color: #ef4444; /* rojo moderno (tailwind red-500) */
+    transition: 0.15s;
+}
+
+.ex-delete-btn:hover {
+    background: rgba(239, 68, 68, 0.12);
+}
+
+/* temporizador */
 .timer {
     position: fixed;
     bottom: 18px;
