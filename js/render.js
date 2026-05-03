@@ -1,5 +1,5 @@
 import { getData, saveData } from "./state.js";
-import { openModal } from "./modal.js";
+import { openModal, openExerciseModal } from "./modal.js";
 
 // =========================
 // PESOS HELPERS
@@ -92,6 +92,18 @@ export function render() {
         title.className = "section-title";
         title.id = sectionId;
         title.textContent = `Día ${index + 1}: ${dia.descripcion}`;
+
+        title.addEventListener("contextmenu", async (e) => {
+            e.preventDefault();
+
+            const nuevo = await openModal(`Cambiar título Día ${index + 1}`, dia.descripcion);
+
+            if (nuevo !== null) {
+                dia.descripcion = nuevo.trim() || "Descanso";
+                saveData(data);
+                render();
+            }
+        });
 
         cont.appendChild(title);
 
@@ -189,13 +201,14 @@ export function render() {
             exCard.appendChild(controls);
 
             exCard.onclick = async () => {
-                const n1 = await openModal("Ejercicio", e.nombre);
-                const n2 = await openModal("Volumen", e.volumen);
-                const n3 = await openModal("Notas", e.notas);
 
-                if (n1 !== null) e.nombre = n1;
-                if (n2 !== null) e.volumen = n2;
-                if (n3 !== null) e.notas = n3;
+                const result = await openExerciseModal(e);
+
+                if (!result) return;
+
+                e.nombre = result.nombre;
+                e.volumen = result.volumen;
+                e.notas = result.notas;
 
                 saveData(data);
                 render();

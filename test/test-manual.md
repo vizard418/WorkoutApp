@@ -12,7 +12,10 @@
 
 * Agregar ejercicio
 * Editar ejercicio (nombre, volumen, notas)
-* Editar peso
+* Agregar peso 1
+* Agregar peso 2
+* Editar peso 1
+* Editar peso 2
 * Eliminar ejercicio
 
 ## Temporizador
