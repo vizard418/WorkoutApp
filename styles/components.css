@@ -61,6 +61,7 @@
     padding: 12px;
     cursor: pointer;
     transition: 0.2s;
+    position: relative;
 }
 
 .day-card:hover {
@@ -77,6 +78,29 @@
     color: var(--muted);
 }
 
+/* tarjetas dias - boton editar titulo */
+.day-edit-btn {
+    position: absolute;
+    bottom: 6px;
+    right: 6px;
+
+    border: none;
+    background: transparent;
+    cursor: pointer;
+
+    font-size: 0.9rem;
+    padding: 4px;
+    border-radius: 6px;
+
+    opacity: 0.85;
+    transition: 0.15s;
+    color: var(--accent);
+}
+
+.day-edit-btn:hover {
+    background: var(--accent-soft);
+    opacity: 1;
+}
 /* titulo de lista de ejercicios */
 .section-title {
     margin: 10px 0 4px;
@@ -136,16 +160,20 @@
     border: none;
     background: transparent;
     cursor: pointer;
-    font-size: 1rem;
-    padding: 0 6px;
+
+    font-size: 0.9rem;
+    padding: 4px;
     border-radius: 6px;
 
-    color: #ef4444; /* rojo moderno (tailwind red-500) */
+    opacity: 0.85;
     transition: 0.15s;
+
+    color: #ef4444;
 }
 
 .ex-delete-btn:hover {
     background: rgba(239, 68, 68, 0.12);
+    opacity: 1;
 }
 
 /* tarjeta dias: estilos drag */

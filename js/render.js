@@ -95,6 +95,24 @@ export function render() {
         card.appendChild(h3);
         card.appendChild(p);
 
+        const editBtn = document.createElement("button");
+        editBtn.className = "day-edit-btn";
+        editBtn.textContent = "✎";
+
+        editBtn.onclick = async (ev) => {
+            ev.stopPropagation();
+
+            const nuevo = await openModal(`Cambiar título Día ${index + 1}`, dia.descripcion);
+
+            if (nuevo !== null) {
+                dia.descripcion = nuevo.trim() || "Descanso";
+                saveData(data);
+                render();
+            }
+        };
+
+        card.appendChild(editBtn);
+
         card.onclick = () => {
             const el = document.getElementById(sectionId);
             if (!el) return;
@@ -103,34 +121,12 @@ export function render() {
             window.scrollTo({ top: y, behavior: "smooth" });
         };
 
-        // addEventLister con fix Long-Press
-        attachLongPress(card, async () => {
-            const nuevo = await openModal(`Cambiar título Día ${index + 1}`, dia.descripcion);
-
-            if (nuevo !== null) {
-                dia.descripcion = nuevo.trim() || "Descanso";
-                saveData(data);
-                render();
-            }
-        });
-
         days.appendChild(card);
 
         const title = document.createElement("div");
         title.className = "section-title";
         title.id = sectionId;
         title.textContent = `Día ${index + 1}: ${dia.descripcion}`;
-
-        // addEventListener con fix Long-Press
-        attachLongPress(title, async () => {
-            const nuevo = await openModal(`Cambiar título Día ${index + 1}`, dia.descripcion);
-
-            if (nuevo !== null) {
-                dia.descripcion = nuevo.trim() || "Descanso";
-                saveData(data);
-                render();
-            }
-        });
 
         cont.appendChild(title);
 
