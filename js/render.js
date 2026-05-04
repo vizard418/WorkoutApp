@@ -66,6 +66,13 @@ function attachLongPress(element, callback, delay = 600) {
     });
 }
 
+// helper eliminar peso
+function deletePeso(e, i, data) {
+    e.pesos.splice(i, 1);
+    saveData(data);
+    render();
+}
+
 export function render() {
     const data = getData();
 
@@ -222,6 +229,25 @@ export function render() {
                         }
                     }
                 };
+
+                // click derecho (desktop)
+                btn.addEventListener("contextmenu", (ev) => {
+                    ev.preventDefault();
+                    ev.stopPropagation();
+
+                    const confirmDelete = confirm(`Eliminar peso (${p}kg)?`);
+                    if (!confirmDelete) return;
+
+                    deletePeso(e, i, data);
+                });
+
+                // long press (mobile)
+                attachLongPress(btn, () => {
+                    const confirmDelete = confirm(`Eliminar peso (${p}kg)?`);
+                    if (!confirmDelete) return;
+
+                    deletePeso(e, i, data);
+                });
 
                 pesosContainer.appendChild(btn);
             });
