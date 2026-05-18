@@ -207,12 +207,7 @@ export function render() {
             pesos.forEach((p, i) => {
                 const btn = document.createElement("button");
                 btn.textContent = p + "kg";
-
-                btn.style.border = "none";
-                btn.style.borderRadius = "6px";
-                btn.style.padding = "3px 6px";
-                btn.style.fontSize = "0.75rem";
-                btn.style.cursor = "pointer";
+                btn.className = "peso-btn";
 
                 btn.onclick = async (ev) => {
                     ev.stopPropagation();
@@ -254,11 +249,7 @@ export function render() {
 
             const addBtn = document.createElement("button");
             addBtn.textContent = "+";
-
-            addBtn.style.border = "none";
-            addBtn.style.borderRadius = "6px";
-            addBtn.style.padding = "3px 8px";
-            addBtn.style.cursor = "pointer";
+            addBtn.className = "peso-add-btn";
 
             addBtn.onclick = async (ev) => {
                 ev.stopPropagation();
