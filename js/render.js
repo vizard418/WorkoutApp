@@ -88,6 +88,9 @@ export function render() {
 
         const sectionId = "dia-" + index;
 
+        const daySection = document.createElement("div");
+        daySection.className = "day-section";
+
         const card = document.createElement("div");
         card.className = "day-card";
 
@@ -135,7 +138,7 @@ export function render() {
         title.id = sectionId;
         title.textContent = `Día ${index + 1}: ${dia.descripcion}`;
 
-        cont.appendChild(title);
+        daySection.appendChild(title);
 
         dia.ejercicios.forEach((e, exIndex) => {
 
@@ -306,7 +309,7 @@ export function render() {
                 render();
             };
 
-            cont.appendChild(exCard);
+            daySection.appendChild(exCard);
         });
 
         const btn = document.createElement("button");
@@ -326,6 +329,7 @@ export function render() {
             render();
         };
 
-        cont.appendChild(btn);
+        daySection.appendChild(btn);
+        cont.appendChild(daySection);
     });
 }

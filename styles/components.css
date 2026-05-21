@@ -102,6 +102,15 @@
     opacity: 1;
 }
 
+/* bloque completo de un dia */
+.day-section {
+    background: rgba(255,255,255,0.02);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 10px;
+    margin-bottom: 18px;
+}
+
 /* titulo de lista de ejercicios */
 .section-title {
     margin: 10px 0 4px;
