@@ -272,3 +272,18 @@
 .peso-add-btn:hover {
     opacity: 0.85;
 }
+
+/* ASPECTO VISUAL DIAS DE ENTRENAMIENTO / DIAS DESCANSO */
+/* dias entrenamiento */
+.day-card.training-day,
+.day-section.training-day {
+    border: 1px solid rgba(105, 109, 220, 0.28);
+    background: rgba(105, 109, 220, 0.04);
+}
+
+/* dias descanso */
+.day-card.rest-day,
+.day-section.rest-day {
+    border: 1px dashed var(--border);
+    opacity: 0.65;
+}

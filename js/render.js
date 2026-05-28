@@ -94,6 +94,16 @@ export function render() {
         const card = document.createElement("div");
         card.className = "day-card";
 
+        // aspecto visual dias con ejercicios / dias sin ejercicios
+        const isRestDay = dia.ejercicios.length === 0;
+        if (isRestDay) {
+            card.classList.add("rest-day");
+            daySection.classList.add("rest-day");
+        } else {
+            card.classList.add("training-day");
+            daySection.classList.add("training-day");
+        }
+
         const h3 = document.createElement("h3");
         h3.textContent = `Día ${index + 1}: ${dia.descripcion}`;
 
