@@ -136,9 +136,38 @@ export function render() {
         const title = document.createElement("div");
         title.className = "section-title";
         title.id = sectionId;
-        title.textContent = `Día ${index + 1}: ${dia.descripcion}`;
+
+        const titleText = document.createElement("span");
+        titleText.textContent = `Día ${index + 1}: ${dia.descripcion}`;
+
+        const hideBtn = document.createElement("button");
+        hideBtn.className = "hide-day-btn";
+        hideBtn.textContent = "−";
+
+        title.appendChild(titleText);
+        title.appendChild(hideBtn);
 
         daySection.appendChild(title);
+
+        const dayContent = document.createElement("div");
+        dayContent.className = "day-content";
+
+        daySection.appendChild(dayContent);
+
+        // logica hide/show
+        let hidden = false;
+
+        hideBtn.onclick = (ev) => {
+            ev.stopPropagation();
+
+            hidden = !hidden;
+
+            dayContent.style.display =
+                hidden ? "none" : "block";
+
+            hideBtn.textContent =
+                hidden ? "›" : "−";
+        };
 
         dia.ejercicios.forEach((e, exIndex) => {
 
@@ -309,7 +338,7 @@ export function render() {
                 render();
             };
 
-            daySection.appendChild(exCard);
+            dayContent.appendChild(exCard);
         });
 
         const btn = document.createElement("button");
@@ -329,7 +358,7 @@ export function render() {
             render();
         };
 
-        daySection.appendChild(btn);
+        dayContent.appendChild(btn);
         cont.appendChild(daySection);
     });
 }

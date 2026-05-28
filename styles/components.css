@@ -121,6 +121,24 @@
     border-radius: 6px;
 }
 
+.section-title {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.hide-day-btn {
+    border: none;
+    background: transparent;
+    color: var(--accent);
+    cursor: pointer;
+
+    min-width: 34px;
+    min-height: 34px;
+
+    border-radius: 8px;
+}
+
 /* tarjetas de ejercicios */
 .exercise-card {
     background: var(--card);
